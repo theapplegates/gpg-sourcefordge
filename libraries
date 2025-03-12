@@ -1,0 +1,19 @@
+# Define one "Library-URL|check" pair per line. The check string can be either
+# a SHA1 checksum or the literal string "sig". In the latter case, a OpenPGP
+# signature will be downloaded and used for verification.
+#
+# Important: Libraries will be built in the order specified here.
+
+https://ftp.gwdg.de/pub/gnu/ftp/gnu/libiconv/libiconv-1.18.tar.gz|sig
+https://ftp.gnu.org/gnu/gettext/gettext-0.24.tar.lz|sig
+https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.51.tar.bz2|sig
+https://gnupg.org/ftp/gcrypt/libassuan/libassuan-3.0.2.tar.bz2|sig
+https://gnupg.org/ftp/gcrypt/libksba/libksba-1.6.7.tar.bz2|sig
+https://ftp.gwdg.de/pub/gnu/ftp/gnu/readline/readline-8.2.13.tar.gz|sig
+https://gnupg.org/ftp/gcrypt/npth/npth-1.8.tar.bz2|sig
+https://sqlite.org/2024/sqlite-autoconf-3470200.tar.gz|f1b2ee412c28d7472bc95ba996368d6f0cdcf00362affdadb27ed286c179540b
+#https://sqlite.org/2025/sqlite-autoconf-3490100.tar.gz|106642d8ccb36c5f7323b64e4152e9b719f7c0215acf5bfeac3d5e7f97b59254
+https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.11.0.tar.bz2|sig
+https://gnupg.org/ftp/gcrypt/ntbtls/ntbtls-0.3.2.tar.bz2|sig
+https://gnupg.org/ftp/gcrypt/gpgme/gpgme-1.24.2.tar.bz2|sig
+https://gnupg.org/ftp/gcrypt/pinentry/pinentry-1.3.1.tar.bz2|sig

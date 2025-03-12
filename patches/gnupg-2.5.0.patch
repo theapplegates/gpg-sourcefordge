@@ -1,0 +1,23 @@
+diff -u -r a/common/exechelp-posix.c b/common/exechelp-posix.c
+--- a/common/exechelp-posix.c	2024-07-05 15:06:38
++++ b/common/exechelp-posix.c	2024-07-17 16:08:22
+@@ -76,6 +76,8 @@
+ #include "sysutils.h"
+ #include "exechelp.h"
+ 
++/* see https://dev.gnupg.org/T7169 */
++extern char **environ;
+ 
+ /* Helper */
+ static inline gpg_error_t
+diff -u -r a/scd/app.c b/scd/app.c
+--- a/scd/app.c	2024-07-05 15:06:38
++++ b/scd/app.c	2024-07-17 16:02:41
+@@ -22,6 +22,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <unistd.h>
+ #include <npth.h>
+ 
+ #include "scdaemon.h"

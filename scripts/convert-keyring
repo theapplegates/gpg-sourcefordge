@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+# vim: ft=sh ts=4 sw=4 noet
+
+cat <<EOT
+
+This script converts your existing public keys to the GnuPG 2.2 keyring
+format. Once you do this, GnuPG 1.x and 2.0.x will use a different file
+for storing the public keys. This may lead to incompatibilities; we therefore
+recommend that you only do this if you don't want to use GnuPG 1.x or 2.0.x
+anymore.
+
+Type Y (and hit ENTER) to continue or anything else to abort
+EOT
+
+read r
+
+if [ "${r}" != "y" -a "${r}" != "Y" ]; then
+	echo "aborted"
+	exit 2
+fi
+
+GNUPG='/usr/local/gnupg-2.2/bin/gpg2'
+[ -n "${GNUPGHOME}" ] || GNUPGHOME="${HOME}/.gnupg"
+cd ${GNUPGHOME}
+
+pkf='pubring.kbx'
+if [ -f ${pkf} ]; then
+	echo "Destination file ${pkf} exists."
+	echo "If you want to re-convert your public keys, please manually delete ${pkf} first."
+	exit 1
+fi
+
+mv -f pubring.gpg gpg1-public-keys.gpg
+mv -f trustdb.gpg trustdb.gpg.orig
+
+${GNUPG} --import gpg1-public-keys.gpg
+
+if [ $? -ne 0 ]; then
+	mv -f gpg1-public-keys.gpg pubring.gpg
+	mv -f trustdb.gpg.orig trustdb.gpg
+	echo "Conversion failed; reverted to previous state."
+	exit 1
+fi
+
+rm -f trustdb.gpg
+mv trustdb.gpg.orig trustdb.gpg
+
+${GNUPG} --check-trustdb
+mv -f gpg1-public-keys.gpg pubring.gpg
+
+echo Conversion finished.

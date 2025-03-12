@@ -1,0 +1,82 @@
+diff --color -ru a/doc/Makefile.am b/doc/Makefile.am
+--- a/doc/Makefile.am	2024-09-20 12:07:25
++++ b/doc/Makefile.am	2024-10-31 05:41:04
+@@ -39,7 +39,7 @@
+ 	     gnupg-logo.pdf gnupg-logo.png gnupg-logo-tr.png \
+ 	     gnupg-module-overview.png gnupg-module-overview.pdf \
+              gnupg-card-architecture.png gnupg-card-architecture.pdf \
+-             FAQ gnupg7.texi mkdefsinc.c defsincdate \
++             FAQ mkdefsinc.c defsincdate \
+              opt-homedir.texi see-also-note.texi specify-user-id.texi \
+ 	     gpgv.texi yat2m.c ChangeLog-2011 whats-new-in-2.1.txt \
+              trust-values.texi
+@@ -76,7 +76,7 @@
+ YAT2M_OPTIONS = -I $(srcdir) \
+         --release "GnuPG @PACKAGE_VERSION@" --source "GNU Privacy Guard 2.4"
+ 
+-myman_sources = gnupg7.texi gpg.texi gpgsm.texi gpg-agent.texi \
++myman_sources = gpg.texi gpgsm.texi gpg-agent.texi \
+ 	        dirmngr.texi scdaemon.texi tools.texi wks.texi \
+                 gpg-card.texi
+ myman_pages   = gpg.1 gpgv.1 gpgsm.1 gpg-agent.1 dirmngr.8 scdaemon.1 \
+@@ -84,18 +84,9 @@
+ 		gpg-connect-agent.1 gpgparsemail.1 gpgtar.1 gpg-mail-tube.1 \
+ 		applygnupgdefaults.8 gpg-wks-client.1 gpg-wks-server.1 \
+ 		dirmngr-client.1 gpg-card.1 gpg-check-pattern.1
+-myhtmlman_pages = \
+-                gpg.1.html gpgv.1.html gpgsm.1.html \
+-                gpg-agent.1.html dirmngr.8.html scdaemon.1.html \
+-                watchgnupg.1.html gpgconf.1.html addgnupghome.8.html \
+-                gpg-preset-passphrase.1.html \
+-		gpg-connect-agent.1.html gpgparsemail.1.html \
+-                gpgtar.1.html gpg-mail-tube.1.html \
+-		applygnupgdefaults.8.html gpg-wks-client.1.html \
+-                gpg-wks-server.1.html \
+-		dirmngr-client.1.html gpg-card.1.html gpg-check-pattern.1.html
++myhtmlman_pages =
+ 
+-man_MANS = $(myman_pages) gnupg.7 gnupg.7.html
++man_MANS = $(myman_pages)
+ 
+ watchgnupg_SOURCE = gnupg.texi
+ 
+@@ -103,7 +94,7 @@
+ CLEANFILES = yat2m mkdefsinc defs.inc
+ 
+ DISTCLEANFILES = gnupg.tmp gnupg.ops yat2m-stamp.tmp yat2m-stamp \
+-		 $(myman_pages) gnupg.7 gnupg.7.html $(myhtmlman_pages)
++		 $(myman_pages)
+ 
+ yat2m: yat2m.c
+ 	$(CC_FOR_BUILD) -o $@ $(srcdir)/yat2m.c
+@@ -143,16 +134,13 @@
+ 	for file in $(myman_sources); do \
+               $(YAT2M) $(YAT2M_OPTIONS) --store \
+                   --date "`cat $$incd 2>/dev/null`" \
+-	          `test -f '$$file' || echo '$(srcdir)/'`$$file ; \
+-              $(YAT2M) $(YAT2M_OPTIONS) --store --html --gnupgorg \
+-                  --date "`cat $$incd 2>/dev/null`" \
+-	          `test -f '$$file' || echo '$(srcdir)/'`$$file ;\
++                  `test -f '$$file' || echo '$(srcdir)/'`$$file ; \
+         done
+ 	@mv -f yat2m-stamp.tmp $@
+ 
+ yat2m-stamp: $(YAT2M)
+ 
+-$(myman_pages) $(myhtmlman_pages) gnupg.7 gnupg.7.html : yat2m-stamp defs.inc
++$(myman_pages) : yat2m-stamp defs.inc
+ 	@if test -f $@; then :; else \
+             trap 'rm -rf yat2m-stamp yat2m-lock' 1 2 13 15; \
+                if mkdir yat2m-lock 2>/dev/null; then \
+diff --color -ru a/scd/app.c b/scd/app.c
+--- a/scd/app.c	2024-10-15 13:40:56
++++ b/scd/app.c	2024-10-31 03:56:22
+@@ -22,6 +22,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <unistd.h>
+ #include <npth.h>
+ 
+ #ifndef HAVE_W32_SYSTEM
+Only in b/scd: app.c.orig

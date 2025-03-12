@@ -1,0 +1,50 @@
+#!/usr/bin/env sh
+# vim: ft=sh ts=4 sw=4 noet
+
+# This file is part of GnuPG for OS X.
+#
+# GnuPG for OS X is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# GnuPG for OS X is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GnuPG for OS X. If not, see https://www.gnu.org/licenses/ .
+
+# The following line will be modified during packaging
+GPGOSX_INSTALLDIR=/usr/local/gnupg-2.2
+
+_die() {
+	echo >&2 "$@"
+	exit 1
+}
+
+_preinstall() {
+	flist="
+		/usr/local/bin/gpg
+		/usr/local/bin/gpg-agent
+		/usr/local/bin/gpg-connect-agent
+		/usr/local/bin/gpg2
+		/usr/local/bin/gpgsm
+		/usr/local/lib/libgpgme.dylib
+	"
+	for f in ${flist}; do
+		if [ -L "${f}" ]; then
+			rm -f "${f}"
+		elif [ -e "${f}" ]; then
+			mv -f "${f}" "${f}.orig"
+		fi
+	done
+	if [ -e "${GPGOSX_INSTALLDIR}" ]; then
+		rm -fr "${GPGOSX_INSTALLDIR}" || _die "Cannot delete ${GPGOSX_INSTALLDIR}"
+	fi
+}
+
+_preinstall
+
+exit 0
